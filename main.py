@@ -21,8 +21,9 @@ class BlogHandler(webapp2.RequestHandler):
         """
 
         # TODO - filter the query so that only posts by the given user
-        query = Post.all().filter("author", user.username).order('-created')
+        query = Post.all().filter("author", self.user).order('-created')
         return query.fetch(limit=limit, offset=offset)
+        # TODO - fix this - page will render but there are no posts on it
 
     def get_user_by_name(self, username):
         """ Get a user object from the db, based on their username """
@@ -108,6 +109,7 @@ class BlogIndexHandler(BlogHandler):
         # render the page
         t = jinja_env.get_template("blog.html")
         response = t.render(
+
                     posts=posts,
                     page=page,
                     page_size=self.page_size,
